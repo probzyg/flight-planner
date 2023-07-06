@@ -1,8 +1,5 @@
 package io.codelex.flightplanner.domain;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Flight {
     private int id;
     private String name;

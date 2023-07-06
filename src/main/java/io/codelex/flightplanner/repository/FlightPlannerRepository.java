@@ -21,4 +21,8 @@ public class FlightPlannerRepository {
     public Flight getFlight(int id) {
         return flightsList.get(id);
     }
+
+    public void clear() {
+        flightsList.clear();
+    }
 }

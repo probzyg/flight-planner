@@ -16,4 +16,8 @@ public class FlightPlannerService {
     public Flight getFlight(int id) {
         return flightPlannerRepository.getFlight(id);
     }
+
+    public void clear() {
+        flightPlannerRepository.clear();
+    }
 }
