@@ -3,12 +3,12 @@ package io.codelex.flightplanner.domain;
 public class Airport {
     private final String country;
     private final String city;
-    private final String airportName;
+    private final String airport;
 
-    public Airport(String country, String city, String airportName) {
+    public Airport(String country, String city, String airport) {
         this.country = country;
         this.city = city;
-        this.airportName = airportName;
+        this.airport = airport;
     }
 
     public String getCountry() {
@@ -19,7 +19,7 @@ public class Airport {
         return city;
     }
 
-    public String getAirportName() {
-        return airportName;
+    public String getAirport() {
+        return airport;
     }
 }
