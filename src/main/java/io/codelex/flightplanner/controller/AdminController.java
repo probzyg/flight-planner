@@ -28,7 +28,11 @@ public class AdminController {
 
     @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
-    public Flight addFlight(@RequestBody AddFlightRequest request) {
-        return flightPlannerService.addFlight(request);
+    public ResponseEntity<Flight> addFlight(@RequestBody AddFlightRequest request) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(flightPlannerService.addFlight(request));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }

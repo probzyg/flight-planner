@@ -24,7 +24,7 @@ public class FlightPlannerService {
         flightPlannerRepository.clear();
     }
 
-    public synchronized Flight addFlight(AddFlightRequest flightRequest) {
+    public synchronized Flight addFlight(AddFlightRequest flightRequest) throws Exception {
         Flight flight = new Flight(flightRequest.getFrom(), flightRequest.getTo(),flightRequest.getCarrier(),flightRequest.getDepartureTime(),flightRequest.getArrivalTime());
         flightPlannerRepository.addFlight(flight);
         return flight;
