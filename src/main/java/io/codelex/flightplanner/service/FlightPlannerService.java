@@ -1,6 +1,5 @@
 package io.codelex.flightplanner.service;
 
-import io.codelex.flightplanner.IdGen;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.repository.FlightPlannerRepository;
 import io.codelex.flightplanner.request.AddFlightRequest;

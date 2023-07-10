@@ -8,10 +8,9 @@ import io.codelex.flightplanner.service.FlightPlannerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
+
 
 @RestController
 @RequestMapping("/admin-api")
