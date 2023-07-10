@@ -1,6 +1,7 @@
 package io.codelex.flightplanner.controller;
 
 import io.codelex.flightplanner.domain.Flight;
+import io.codelex.flightplanner.dto.TimeDTO;
 import io.codelex.flightplanner.request.AddFlightRequest;
 import io.codelex.flightplanner.response.FlightResponse;
 import io.codelex.flightplanner.service.FlightPlannerService;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Time;
 
 @RestController
 @RequestMapping("/admin-api")
@@ -31,7 +34,7 @@ public class AdminController {
     @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Flight> addFlight(@Valid @RequestBody AddFlightRequest request) {
-
+        TimeDTO flightTimeDTO = new TimeDTO(request.getDepartureTime(), request.getArrivalTime());
 
         String fromCountry = request.getFrom().getCountry().toLowerCase();
         String toCountry = request.getTo().getCountry().toLowerCase();
@@ -41,6 +44,10 @@ public class AdminController {
         String toAirport = request.getTo().getAirport().toLowerCase();
 
         if (fromAirport.equals(toAirport) || fromCountry.equals(toCountry) || fromCity.equals(toCity)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!flightTimeDTO.isBefore()) {
             return ResponseEntity.badRequest().build();
         }
 
