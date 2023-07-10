@@ -33,6 +33,17 @@ public class AdminController {
     public ResponseEntity<Flight> addFlight(@Valid @RequestBody AddFlightRequest request) {
 
 
+        String fromCountry = request.getFrom().getCountry().toLowerCase();
+        String toCountry = request.getTo().getCountry().toLowerCase();
+        String fromCity = request.getFrom().getCity().toLowerCase();
+        String toCity = request.getTo().getCity().toLowerCase();
+        String fromAirport = request.getFrom().getAirport().toLowerCase();
+        String toAirport = request.getTo().getAirport().toLowerCase();
+
+        if (fromAirport.equals(toAirport) || fromCountry.equals(toCountry) || fromCity.equals(toCity)) {
+            return ResponseEntity.badRequest().build();
+        }
+
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(flightPlannerService.addFlight(request));
         } catch (Exception e) {
