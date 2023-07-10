@@ -1,11 +1,18 @@
 package io.codelex.flightplanner.domain;
 
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Objects;
 
 public class Airport {
+    @NotBlank
     private final String country;
+    @NotBlank
     private final String city;
+    @NotBlank
     private final String airport;
 
     public Airport(String country, String city, String airport) {

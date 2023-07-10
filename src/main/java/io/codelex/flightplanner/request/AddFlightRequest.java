@@ -1,14 +1,27 @@
 package io.codelex.flightplanner.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.codelex.flightplanner.domain.Airport;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 
 public class AddFlightRequest {
+    @Valid
+    @NotNull
     private Airport from;
+    @Valid
+    @NotNull
     private Airport to;
+    @NotBlank
     private String carrier;
+    @NotBlank
     private String departureTime;
+    @NotBlank
     private String arrivalTime;
+
+
      public AddFlightRequest() {
     }
 
