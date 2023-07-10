@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.repository;
 
+import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,10 @@ public class FlightPlannerRepository {
 
     public FlightPlannerRepository() {
         this.flights = new ArrayList<>();
+    }
+
+    public List<Flight> getFlights() {
+        return flights;
     }
 
     public void addFlight(Flight flight) throws Exception {
@@ -34,4 +39,5 @@ public class FlightPlannerRepository {
     public Flight deleteFlight(int id) {
         return flights.remove(id-1);
     }
+
 }
