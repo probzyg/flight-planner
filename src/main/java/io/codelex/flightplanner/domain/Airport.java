@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.domain;
 
+
 public class Airport {
     private final String country;
     private final String city;
