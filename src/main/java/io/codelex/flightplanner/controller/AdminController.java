@@ -56,4 +56,14 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+    @DeleteMapping("/flights/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Flight> deleteFlight(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(flightPlannerService.deleteFlight(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(200).build();
+        }
+    }
 }

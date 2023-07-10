@@ -28,4 +28,8 @@ public class FlightPlannerService {
         flightPlannerRepository.addFlight(flight);
         return flight;
     }
+
+    public Flight deleteFlight(int id) {
+        return flightPlannerRepository.deleteFlight(id);
+    }
 }

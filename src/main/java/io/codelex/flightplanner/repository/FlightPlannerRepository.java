@@ -30,4 +30,8 @@ public class FlightPlannerRepository {
     public void clear() {
         flights.clear();
     }
+
+    public Flight deleteFlight(int id) {
+        return flights.remove(id-1);
+    }
 }
