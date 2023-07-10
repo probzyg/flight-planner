@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.codelex.flightplanner.domain.Airport;
 
 public class AddFlightRequest {
@@ -8,13 +9,7 @@ public class AddFlightRequest {
     private String carrier;
     private String departureTime;
     private String arrivalTime;
-
-    public AddFlightRequest(Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
-        this.from = from;
-        this.to = to;
-        this.carrier = carrier;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
+     public AddFlightRequest() {
     }
 
     public Airport getFrom() {

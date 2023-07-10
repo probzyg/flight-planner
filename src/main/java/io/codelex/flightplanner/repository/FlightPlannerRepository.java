@@ -1,28 +1,31 @@
 package io.codelex.flightplanner.repository;
 
+import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Repository
 public class FlightPlannerRepository {
-    private final List<Flight> flightsList;
+
+    private List<Flight> flights;
 
     public FlightPlannerRepository() {
-        this.flightsList = new ArrayList<>();
+        this.flights = new ArrayList<>();
     }
 
-    public void saveFlight(Flight flight) {
-        flightsList.add(flight);
+    public void addFlight(Flight flight) {
+        this.flights.add(flight);
     }
 
     public Flight getFlight(int id) {
-        return flightsList.get(id);
+        return flights.get(id-1);
     }
 
     public void clear() {
-        flightsList.clear();
+        flights.clear();
     }
 }
