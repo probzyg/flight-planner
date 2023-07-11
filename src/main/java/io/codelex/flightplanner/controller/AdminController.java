@@ -59,7 +59,7 @@ public class AdminController {
 
     @DeleteMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Flight> deleteFlight(@PathVariable int id) {
+    public ResponseEntity<Object> deleteFlight(@PathVariable int id) {
         try {
             return ResponseEntity.ok(flightPlannerService.deleteFlight(id));
         } catch (Exception e) {

@@ -42,8 +42,8 @@ public class FlightPlannerRepository {
         IdGen.setId(0);
     }
 
-    public Flight deleteFlight(int id) {
-        return flights.remove(id-1);
+    public boolean deleteFlight(int id) {
+        return this.flights.removeIf(flight -> flight.getId() == id);
     }
 
 }

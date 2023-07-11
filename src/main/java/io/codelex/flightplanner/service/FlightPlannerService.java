@@ -36,7 +36,7 @@ public class FlightPlannerService {
         return flight;
     }
 
-    public Flight deleteFlight(int id) {
+    public boolean deleteFlight(int id) {
         return flightPlannerRepository.deleteFlight(id);
     }
 
