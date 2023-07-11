@@ -22,9 +22,9 @@ public class AdminController {
     }
 
     @GetMapping("/flights/{id}")
-    public ResponseEntity<FlightResponse> getFlight(@PathVariable("id") int id) {
+    public ResponseEntity<FlightResponse> fetchFlight(@PathVariable("id") int id) {
         try {
-            return ResponseEntity.ok(flightPlannerService.getFlight(id));
+            return ResponseEntity.ok(flightPlannerService.fetchFlight(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

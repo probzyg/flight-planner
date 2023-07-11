@@ -4,14 +4,14 @@ import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.repository.FlightPlannerRepository;
 import io.codelex.flightplanner.request.AddFlightRequest;
+import io.codelex.flightplanner.request.SearchFlightRequest;
 import io.codelex.flightplanner.response.FlightResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -22,8 +22,8 @@ public class FlightPlannerService {
         this.flightPlannerRepository = flightPlannerRepository;
     }
 
-    public FlightResponse getFlight(int id) {
-        return new FlightResponse(flightPlannerRepository.getFlight(id));
+    public FlightResponse fetchFlight(int id) {
+        return new FlightResponse(flightPlannerRepository.fetchFlight(id));
     }
 
     public void clear() {
@@ -57,5 +57,19 @@ public class FlightPlannerService {
                         pattern.matcher(a.getCity()).matches() ||
                         pattern.matcher(a.getAirport()).matches())
                 .toList();
+    }
+
+    public List<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
+        List<Flight> flights = flightPlannerRepository.getFlights();
+
+        Airport from = searchAirports(searchFlightRequest.getFrom()).stream().findFirst().orElse(null);
+        Airport to = searchAirports(searchFlightRequest.getTo()).stream().findFirst().orElse(null);
+
+            return flights.stream()
+                    .filter(a -> a.getFrom().equals(from) &&
+                            a.getTo().equals(to) &&
+                            a.getDepartureTime()
+                                    .equals(searchFlightRequest.getDepartureDate()))
+                    .toList();
     }
 }

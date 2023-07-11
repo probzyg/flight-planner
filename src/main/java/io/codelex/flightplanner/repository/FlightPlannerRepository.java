@@ -1,6 +1,6 @@
 package io.codelex.flightplanner.repository;
 
-import io.codelex.flightplanner.domain.Airport;
+import io.codelex.flightplanner.IdGen;
 import io.codelex.flightplanner.domain.Flight;
 import org.springframework.stereotype.Repository;
 
@@ -28,12 +28,13 @@ public class FlightPlannerRepository {
         this.flights.add(flight);
     }
 
-    public Flight getFlight(int id) {
-        return flights.get(id-1);
+    public Flight fetchFlight(int id) {
+        return flights.get((id-1));
     }
 
     public void clear() {
         flights.clear();
+        IdGen.setId(0);
     }
 
     public Flight deleteFlight(int id) {
