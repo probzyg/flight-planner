@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.service;
 
+import io.codelex.flightplanner.IdGen;
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.dto.TimeDTO;
@@ -10,6 +11,7 @@ import io.codelex.flightplanner.response.FlightResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +26,17 @@ public class FlightPlannerService {
         this.flightPlannerRepository = flightPlannerRepository;
     }
 
-    public FlightResponse fetchFlight(int id) {
-        return new FlightResponse(flightPlannerRepository.fetchFlight(id));
+    public synchronized FlightResponse fetchFlight(int id) {
+        return new FlightResponse(flightPlannerRepository.getFlights()
+                .stream()
+                .filter(flight -> flight.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     public void clear() {
-        flightPlannerRepository.clear();
+        this.flightPlannerRepository.getFlights().clear();
+        IdGen.setId(0);
     }
 
     public synchronized ResponseEntity<Flight> addFlight(AddFlightRequest flightRequest) throws Exception {
@@ -51,13 +58,16 @@ public class FlightPlannerService {
         }
 
         Flight flight = new Flight(flightRequest.getFrom(), flightRequest.getTo(),flightRequest.getCarrier(),flightRequest.getDepartureTime(),flightRequest.getArrivalTime());
-        flightPlannerRepository.addFlight(flight);
+        if (flightPlannerRepository.getFlights().contains(flight)) {
+            throw new Exception();
+        }
+        this.flightPlannerRepository.getFlights().add(flight);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(flight);
     }
 
     public boolean deleteFlight(int id) {
-        return flightPlannerRepository.deleteFlight(id);
+        return this.flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
     }
 
     public List<Airport> searchAirports(String phrase) {
