@@ -2,10 +2,12 @@ package io.codelex.flightplanner.service;
 
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
+import io.codelex.flightplanner.dto.TimeDTO;
 import io.codelex.flightplanner.repository.FlightPlannerRepository;
 import io.codelex.flightplanner.request.AddFlightRequest;
 import io.codelex.flightplanner.request.SearchFlightRequest;
 import io.codelex.flightplanner.response.FlightResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +32,28 @@ public class FlightPlannerService {
         flightPlannerRepository.clear();
     }
 
-    public synchronized Flight addFlight(AddFlightRequest flightRequest) throws Exception {
+    public synchronized ResponseEntity<Flight> addFlight(AddFlightRequest flightRequest) throws Exception {
+        TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
+
+        String fromCountry = flightRequest.getFrom().getCountry().toLowerCase();
+        String toCountry = flightRequest.getTo().getCountry().toLowerCase();
+        String fromCity = flightRequest.getFrom().getCity().toLowerCase();
+        String toCity = flightRequest.getTo().getCity().toLowerCase();
+        String fromAirport = flightRequest.getFrom().getAirport().toLowerCase();
+        String toAirport = flightRequest.getTo().getAirport().toLowerCase();
+
+        if (fromAirport.equals(toAirport) || fromCountry.equals(toCountry) || fromCity.equals(toCity)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!flightTimeDTO.isBefore()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Flight flight = new Flight(flightRequest.getFrom(), flightRequest.getTo(),flightRequest.getCarrier(),flightRequest.getDepartureTime(),flightRequest.getArrivalTime());
         flightPlannerRepository.addFlight(flight);
-        return flight;
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(flight);
     }
 
     public boolean deleteFlight(int id) {

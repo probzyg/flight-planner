@@ -1,7 +1,6 @@
 package io.codelex.flightplanner.controller;
 
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.dto.TimeDTO;
 import io.codelex.flightplanner.request.AddFlightRequest;
 import io.codelex.flightplanner.response.FlightResponse;
 import io.codelex.flightplanner.service.FlightPlannerService;
@@ -33,25 +32,8 @@ public class AdminController {
     @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Flight> addFlight(@Valid @RequestBody AddFlightRequest request) {
-        TimeDTO flightTimeDTO = new TimeDTO(request.getDepartureTime(), request.getArrivalTime());
-
-        String fromCountry = request.getFrom().getCountry().toLowerCase();
-        String toCountry = request.getTo().getCountry().toLowerCase();
-        String fromCity = request.getFrom().getCity().toLowerCase();
-        String toCity = request.getTo().getCity().toLowerCase();
-        String fromAirport = request.getFrom().getAirport().toLowerCase();
-        String toAirport = request.getTo().getAirport().toLowerCase();
-
-        if (fromAirport.equals(toAirport) || fromCountry.equals(toCountry) || fromCity.equals(toCity)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (!flightTimeDTO.isBefore()) {
-            return ResponseEntity.badRequest().build();
-        }
-
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(flightPlannerService.addFlight(request));
+            return flightPlannerService.addFlight(request);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
