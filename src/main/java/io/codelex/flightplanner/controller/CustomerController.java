@@ -6,8 +6,10 @@ import io.codelex.flightplanner.request.SearchFlightRequest;
 import io.codelex.flightplanner.response.PageResult;
 import io.codelex.flightplanner.service.FlightPlannerService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -22,29 +24,24 @@ public class CustomerController {
     }
 
     @GetMapping("/airports")
-    public ResponseEntity<List<Airport>> searchAirports(@RequestParam("search") String phrase) {
-        return ResponseEntity.ok(this.flightPlannerService.searchAirports(phrase.trim()));
+    @ResponseStatus(HttpStatus.OK)
+    public List<Airport> searchAirports(@RequestParam("search") String phrase) {
+        return this.flightPlannerService.searchAirports(phrase.trim());
     }
 
     @PostMapping("/flights/search")
-    public ResponseEntity<PageResult<Flight>> searchFlights(@RequestBody @Valid SearchFlightRequest searchFlightRequest) {
+    public PageResult<Flight> searchFlights(@RequestBody @Valid SearchFlightRequest searchFlightRequest) {
         if (searchFlightRequest.getFrom().equals(searchFlightRequest.getTo())) {
-            return ResponseEntity.status(400).build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         List<Flight> foundFlights = flightPlannerService.searchFlight(searchFlightRequest);
-        try {
-            return ResponseEntity.ok(new PageResult<>(0, foundFlights.size(), foundFlights));
-        } catch (Exception e) {
-            return ResponseEntity.status(400).build();
-        }
+
+        return new PageResult<>(0, foundFlights.size(), foundFlights);
     }
 
     @GetMapping("/flights/{id}")
-    public ResponseEntity<Flight> findFlightById(@PathVariable int id) {
-        try {
-            return ResponseEntity.ok(flightPlannerService.fetchFlight(id).getFlight());
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    @ResponseStatus(HttpStatus.OK)
+    public Flight findFlightById(@PathVariable int id) {
+            return flightPlannerService.fetchFlight(id).getFlight();
     }
 }
