@@ -70,6 +70,9 @@ public class Flight {
     public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
+    public String getDepartureDate() {
+        return this.departureTime.split(" ")[0];
+    }
 
     @Override
     public boolean equals(Object o) {

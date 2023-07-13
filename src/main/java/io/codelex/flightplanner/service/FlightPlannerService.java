@@ -76,7 +76,7 @@ public class FlightPlannerService {
         return new Flight(from, to, carrier, departureTime, arrivalTime);
     }
 
-    public List<Airport> searchAirports(String phrase) {
+    public synchronized List<Airport> searchAirports(String phrase) {
         List<Flight> flights = flightPlannerRepository.getFlights();
         List<Airport> airportList = new ArrayList<>();
 
@@ -95,7 +95,7 @@ public class FlightPlannerService {
                 .toList();
     }
 
-    public List<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
+    public synchronized List<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
         List<Flight> flights = flightPlannerRepository.getFlights();
 
         Airport from = searchAirports(searchFlightRequest.getFrom()).stream().findFirst().orElse(null);
@@ -104,7 +104,7 @@ public class FlightPlannerService {
             return flights.stream()
                     .filter(a -> a.getFrom().equals(from) &&
                             a.getTo().equals(to) &&
-                            a.getDepartureTime()
+                            a.getDepartureDate()
                                     .equals(searchFlightRequest.getDepartureDate()))
                     .toList();
     }
