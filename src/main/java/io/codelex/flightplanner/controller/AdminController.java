@@ -26,7 +26,7 @@ public class AdminController {
 
     @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
-    public Flight addFlight(@Valid @RequestBody AddFlightRequest request) throws Exception {
+    public Flight addFlight(@Valid @RequestBody AddFlightRequest request){
             return flightPlannerService.addFlight(request);
     }
 

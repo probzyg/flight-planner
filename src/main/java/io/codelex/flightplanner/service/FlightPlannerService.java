@@ -38,7 +38,7 @@ public class FlightPlannerService {
         IdGen.setId(0);
     }
 
-    public synchronized Flight addFlight(AddFlightRequest flightRequest) throws Exception {
+    public synchronized Flight addFlight(AddFlightRequest flightRequest){
         TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
 
 
