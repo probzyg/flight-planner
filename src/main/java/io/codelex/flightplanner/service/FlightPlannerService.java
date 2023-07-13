@@ -39,28 +39,43 @@ public class FlightPlannerService {
     }
 
     public synchronized Flight addFlight(AddFlightRequest flightRequest){
-        TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
+        Flight flight = isValidAddFlightRequest(flightRequest);
+        this.flightPlannerRepository.getFlights().add(flight);
 
+        return flight;
+    }
 
+    public Flight isValidAddFlightRequest(AddFlightRequest flightRequest) {
+        isValidAirport(flightRequest);
+        isValidTime(flightRequest);
+        isValidFlightRequest(flightRequest);
+
+        return createFlight(flightRequest);
+    }
+
+    public void isValidAirport(AddFlightRequest flightRequest) {
         String fromAirport = flightRequest.getFrom().getAirport().toLowerCase().trim();
         String toAirport = flightRequest.getTo().getAirport().toLowerCase().trim();
 
         if (fromAirport.equals(toAirport)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+    }
 
+    public void isValidTime(AddFlightRequest flightRequest) {
+        TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
         if (!flightTimeDTO.isBefore()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+    }
 
+    public void isValidFlightRequest(AddFlightRequest flightRequest) {
         Flight flight = createFlight(flightRequest);
         if (flightPlannerRepository.getFlights().contains(flight)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        this.flightPlannerRepository.getFlights().add(flight);
-
-        return flight;
     }
+
 
     public synchronized void deleteFlight(int id) {
         flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
@@ -78,12 +93,7 @@ public class FlightPlannerService {
 
     public synchronized List<Airport> searchAirports(String phrase) {
         List<Flight> flights = flightPlannerRepository.getFlights();
-        List<Airport> airportList = new ArrayList<>();
-
-        for (Flight flight : flights) {
-            airportList.add(flight.getFrom());
-            airportList.add(flight.getTo());
-        }
+        List<Airport> airportList = createAirportList(flights);
 
         String regex = ".*" + phrase + ".*";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
@@ -93,6 +103,16 @@ public class FlightPlannerService {
                         pattern.matcher(a.getCity()).matches() ||
                         pattern.matcher(a.getAirport()).matches())
                 .toList();
+    }
+
+    public List<Airport> createAirportList(List<Flight> flights) {
+        List<Airport> airportList = new ArrayList<>();
+
+        for (Flight flight : flights) {
+            airportList.add(flight.getFrom());
+            airportList.add(flight.getTo());
+        }
+        return airportList;
     }
 
     public synchronized List<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
