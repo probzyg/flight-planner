@@ -65,8 +65,8 @@ public class FlightPlannerService {
         return flight;
     }
 
-    public synchronized boolean deleteFlight(int id) {
-        return flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
+    public synchronized void deleteFlight(int id) {
+        flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
     }
 
     public synchronized Flight createFlight(AddFlightRequest addFlightRequest) {
