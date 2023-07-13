@@ -1,17 +1,17 @@
 package io.codelex.flightplanner;
 
 public class IdGen {
-    private static int id = 0;
+    private static long id = 0;
 
-    public static int getNextId() {
+    public static long getNextId() {
         return ++id;
     }
 
-    public static int getId() {
+    public static long getId() {
         return id;
     }
 
-    public static void setId(int id) {
+    public static void setId(long id) {
         IdGen.id = id;
     }
 }

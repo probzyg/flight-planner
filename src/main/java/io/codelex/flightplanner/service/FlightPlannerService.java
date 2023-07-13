@@ -25,7 +25,7 @@ public class FlightPlannerService {
         this.flightPlannerRepository = flightPlannerRepository;
     }
 
-    public synchronized FlightResponse fetchFlight(int id) {
+    public synchronized FlightResponse fetchFlight(long id) {
         return new FlightResponse(flightPlannerRepository.getFlights()
                 .stream()
                 .filter(flight -> flight.getId() == id)
@@ -77,7 +77,7 @@ public class FlightPlannerService {
     }
 
 
-    public synchronized void deleteFlight(int id) {
+    public synchronized void deleteFlight(long id) {
         flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
     }
 

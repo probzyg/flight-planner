@@ -40,7 +40,7 @@ public class CustomerController {
 
     @GetMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Flight findFlightById(@PathVariable int id) {
+    public Flight findFlightById(@PathVariable long id) {
             return flightPlannerService.fetchFlight(id).getFlight();
     }
 }

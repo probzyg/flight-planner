@@ -20,7 +20,7 @@ public class AdminController {
     }
 
     @GetMapping("/flights/{id}")
-    public FlightResponse fetchFlight(@PathVariable("id") int id) {
+    public FlightResponse fetchFlight(@PathVariable("id") long id) {
             return flightPlannerService.fetchFlight(id);
     }
 
@@ -32,7 +32,7 @@ public class AdminController {
 
     @DeleteMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteFlight(@PathVariable int id) {
+    public void deleteFlight(@PathVariable long id) {
         flightPlannerService.deleteFlight(id);
     }
 }
