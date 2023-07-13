@@ -13,14 +13,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        /*http.httpBasic(withDefaults())
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/testing-api/**", "/api/**").permitAll()
-                        .anyRequest().authenticated()
-                );
-        http.csrf(AbstractHttpConfigurer::disable);
-        return http.build();*/
-
         http.httpBasic(withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("admin-api/flights").authenticated()

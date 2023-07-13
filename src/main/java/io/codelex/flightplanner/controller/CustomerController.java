@@ -7,7 +7,6 @@ import io.codelex.flightplanner.response.PageResult;
 import io.codelex.flightplanner.service.FlightPlannerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 

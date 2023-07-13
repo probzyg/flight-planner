@@ -18,6 +18,4 @@ public class TestingController {
     public void clear() {
         flightPlannerService.clear();
     }
-
-
 }

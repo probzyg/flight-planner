@@ -1,10 +1,8 @@
 package io.codelex.flightplanner.domain;
 
-
 import io.codelex.flightplanner.IdGen;
 
 import java.util.Objects;
-
 
 public class Flight {
     private long id;

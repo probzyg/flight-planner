@@ -1,7 +1,5 @@
 package io.codelex.flightplanner.response;
 
-import io.codelex.flightplanner.domain.Flight;
-
 import java.util.List;
 
 public class PageResult<T> {

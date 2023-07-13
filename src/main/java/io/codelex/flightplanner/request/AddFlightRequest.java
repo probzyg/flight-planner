@@ -21,7 +21,6 @@ public class AddFlightRequest {
     @NotBlank
     private String arrivalTime;
 
-
      public AddFlightRequest() {
     }
 
