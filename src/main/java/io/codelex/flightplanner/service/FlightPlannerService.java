@@ -41,14 +41,11 @@ public class FlightPlannerService {
     public synchronized Flight addFlight(AddFlightRequest flightRequest) throws Exception {
         TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
 
-        String fromCountry = flightRequest.getFrom().getCountry().toLowerCase();
-        String toCountry = flightRequest.getTo().getCountry().toLowerCase();
-        String fromCity = flightRequest.getFrom().getCity().toLowerCase();
-        String toCity = flightRequest.getTo().getCity().toLowerCase();
-        String fromAirport = flightRequest.getFrom().getAirport().toLowerCase();
-        String toAirport = flightRequest.getTo().getAirport().toLowerCase();
 
-        if (fromAirport.equals(toAirport) || fromCountry.equals(toCountry) || fromCity.equals(toCity)) {
+        String fromAirport = flightRequest.getFrom().getAirport().toLowerCase().trim();
+        String toAirport = flightRequest.getTo().getAirport().toLowerCase().trim();
+
+        if (fromAirport.equals(toAirport)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
