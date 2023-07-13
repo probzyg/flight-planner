@@ -9,7 +9,6 @@ import io.codelex.flightplanner.request.AddFlightRequest;
 import io.codelex.flightplanner.request.SearchFlightRequest;
 import io.codelex.flightplanner.response.FlightResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,7 +38,7 @@ public class FlightPlannerService {
         IdGen.setId(0);
     }
 
-    public synchronized ResponseEntity<Flight> addFlight(AddFlightRequest flightRequest) throws Exception {
+    public synchronized Flight addFlight(AddFlightRequest flightRequest) throws Exception {
         TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
 
         String fromCountry = flightRequest.getFrom().getCountry().toLowerCase();
@@ -50,24 +49,34 @@ public class FlightPlannerService {
         String toAirport = flightRequest.getTo().getAirport().toLowerCase();
 
         if (fromAirport.equals(toAirport) || fromCountry.equals(toCountry) || fromCity.equals(toCity)) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if (!flightTimeDTO.isBefore()) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        Flight flight = new Flight(flightRequest.getFrom(), flightRequest.getTo(),flightRequest.getCarrier(),flightRequest.getDepartureTime(),flightRequest.getArrivalTime());
+        Flight flight = createFlight(flightRequest);
         if (flightPlannerRepository.getFlights().contains(flight)) {
-            throw new Exception();
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
         this.flightPlannerRepository.getFlights().add(flight);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(flight);
+        return flight;
     }
 
-    public boolean deleteFlight(int id) {
-        return this.flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
+    public synchronized boolean deleteFlight(int id) {
+        return flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
+    }
+
+    public synchronized Flight createFlight(AddFlightRequest addFlightRequest) {
+        Airport from = addFlightRequest.getFrom();
+        Airport to = addFlightRequest.getTo();
+        String carrier = addFlightRequest.getCarrier();
+        String departureTime = addFlightRequest.getDepartureTime();
+        String arrivalTime = addFlightRequest.getArrivalTime();
+
+        return new Flight(from, to, carrier, departureTime, arrivalTime);
     }
 
     public List<Airport> searchAirports(String phrase) {

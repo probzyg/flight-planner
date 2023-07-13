@@ -6,7 +6,6 @@ import io.codelex.flightplanner.response.FlightResponse;
 import io.codelex.flightplanner.service.FlightPlannerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,31 +20,19 @@ public class AdminController {
     }
 
     @GetMapping("/flights/{id}")
-    public ResponseEntity<FlightResponse> fetchFlight(@PathVariable("id") int id) {
-        try {
-            return ResponseEntity.ok(flightPlannerService.fetchFlight(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public FlightResponse fetchFlight(@PathVariable("id") int id) {
+            return flightPlannerService.fetchFlight(id);
     }
 
     @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Flight> addFlight(@Valid @RequestBody AddFlightRequest request) {
-        try {
+    public Flight addFlight(@Valid @RequestBody AddFlightRequest request) throws Exception {
             return flightPlannerService.addFlight(request);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
     }
 
     @DeleteMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> deleteFlight(@PathVariable int id) {
-        try {
-            return ResponseEntity.ok(flightPlannerService.deleteFlight(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(200).build();
-        }
+    public void deleteFlight(@PathVariable int id) {
+        flightPlannerService.deleteFlight(id);
     }
 }
