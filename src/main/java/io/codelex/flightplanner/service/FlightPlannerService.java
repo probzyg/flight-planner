@@ -118,12 +118,12 @@ public class FlightPlannerService {
     public List<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
         List<Flight> flights = flightPlannerRepository.getFlights();
 
-        Airport from = searchAirports(searchFlightRequest.getFrom()).stream().findFirst().orElse(null);
-        Airport to = searchAirports(searchFlightRequest.getTo()).stream().findFirst().orElse(null);
+        String from = searchFlightRequest.getFrom().trim().toUpperCase();
+        String to = searchFlightRequest.getTo().trim().toUpperCase();
 
             return flights.stream()
-                    .filter(a -> a.getFrom().equals(from) &&
-                            a.getTo().equals(to) &&
+                    .filter(a -> a.getFrom().getAirport().equals(from) &&
+                            a.getTo().getAirport().equals(to) &&
                             a.getDepartureDate()
                                     .equals(searchFlightRequest.getDepartureDate()))
                     .toList();
