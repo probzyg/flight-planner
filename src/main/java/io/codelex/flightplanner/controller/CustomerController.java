@@ -30,12 +30,7 @@ public class CustomerController {
 
     @PostMapping("/flights/search")
     public PageResult<Flight> searchFlights(@RequestBody @Valid SearchFlightRequest searchFlightRequest) {
-        if (searchFlightRequest.getFrom().equals(searchFlightRequest.getTo())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-        List<Flight> foundFlights = flightPlannerService.searchFlight(searchFlightRequest);
-
-        return new PageResult<>(0, foundFlights.size(), foundFlights);
+        return flightPlannerService.searchFlight(searchFlightRequest);
     }
 
     @GetMapping("/flights/{id}")
