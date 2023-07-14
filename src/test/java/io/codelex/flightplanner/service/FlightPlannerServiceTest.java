@@ -3,10 +3,8 @@ package io.codelex.flightplanner.service;
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.repository.FlightPlannerRepository;
-import io.codelex.flightplanner.request.AddFlightRequest;
 import io.codelex.flightplanner.request.SearchFlightRequest;
 import io.codelex.flightplanner.response.PageResult;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +41,7 @@ class FlightPlannerServiceTest {
         PageResult<Flight> result = flightPlannerService.searchFlight(request);
         Mockito.verify(flightPlannerRepository).getFlights();
 
-        Assertions.assertEquals(result.getTotalItems(), 1);
+        assertEquals(result.getTotalItems(), 1);
     }
 
     private List<Flight> createMockFlightsList() {
