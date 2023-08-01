@@ -14,9 +14,9 @@ public interface FlightPlannerService {
     void clear();
     Flight addFlight(AddFlightRequest flightRequest);
     Flight isValidAddFlightRequest(AddFlightRequest flightRequest);
-    void isValidAirport(AddFlightRequest flightRequest);
-    void isValidTime(AddFlightRequest flightRequest);
-    void isValidFlightRequest(AddFlightRequest flightRequest);
+    boolean isValidAirport(AddFlightRequest flightRequest);
+    boolean isValidTime(AddFlightRequest flightRequest);
+    boolean isValidFlightRequest(AddFlightRequest flightRequest);
     void deleteFlight(long id);
     Flight createFlight(AddFlightRequest addFlightRequest);
     List<Airport> searchAirports(String phrase);
