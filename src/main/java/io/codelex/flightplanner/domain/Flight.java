@@ -11,10 +11,10 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    @JoinColumn(insertable = false, updatable = false, name = "airport")
+    @JoinColumn(insertable = false, updatable = false, name = "from_airport")
     private Airport from;
     @ManyToOne
-    @JoinColumn(insertable = false, updatable = false, name = "airport")
+    @JoinColumn(insertable = false, updatable = false, name = "to_airport")
     private Airport to;
     @Column(name = "carrier")
     private String carrier;
