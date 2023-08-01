@@ -1,23 +1,31 @@
 package io.codelex.flightplanner.domain;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 
 import java.util.Objects;
-
+@Entity
+@Table(name = "airport")
 public class Airport {
     @NotBlank
-    private final String country;
+    private String country = "";
     @NotBlank
-    private final String city;
+    private String city = "";
     @NotBlank
-    private final String airport;
+    @Id
+    private String airport = "";
 
     public Airport(String country, String city, String airport) {
         this.country = country;
         this.city = city;
         this.airport = airport;
+    }
+
+    public Airport() {
     }
 
     public String getCountry() {

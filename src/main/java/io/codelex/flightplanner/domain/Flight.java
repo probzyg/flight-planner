@@ -1,15 +1,26 @@
 package io.codelex.flightplanner.domain;
 
 import io.codelex.flightplanner.IdGen;
+import jakarta.persistence.*;
 
 import java.util.Objects;
-
+@Entity
+@Table(name = "flight")
 public class Flight {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne
+    @JoinColumn(insertable = false, updatable = false, name = "airport")
     private Airport from;
+    @ManyToOne
+    @JoinColumn(insertable = false, updatable = false, name = "airport")
     private Airport to;
+    @Column(name = "carrier")
     private String carrier;
+    @Column(name = "departure_time")
     private String departureTime;
+    @Column(name = "arrival_time")
     private String arrivalTime;
 
     public Flight(Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
@@ -19,6 +30,9 @@ public class Flight {
         this.carrier = carrier;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
+    }
+
+    public Flight() {
     }
 
     public long getId() {

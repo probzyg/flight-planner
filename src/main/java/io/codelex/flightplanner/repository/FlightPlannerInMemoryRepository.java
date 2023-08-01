@@ -8,11 +8,11 @@ import java.util.List;
 
 
 @Repository
-public class FlightPlannerRepository {
+public class FlightPlannerInMemoryRepository {
 
     private List<Flight> flights;
 
-    public FlightPlannerRepository() {
+    public FlightPlannerInMemoryRepository() {
         this.flights = new ArrayList<>();
     }
 
