@@ -2,7 +2,7 @@ package io.codelex.flightplanner.service;
 
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.repository.FlightPlannerRepository;
+import io.codelex.flightplanner.repository.FlightPlannerInMemoryRepository;
 import io.codelex.flightplanner.request.SearchFlightRequest;
 import io.codelex.flightplanner.response.PageResult;
 import org.junit.jupiter.api.DisplayName;
@@ -19,13 +19,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class FlightPlannerServiceTest {
+class FlightPlannerInMemoryServiceTest {
 
     @Mock
-    FlightPlannerRepository flightPlannerRepository;
+    FlightPlannerInMemoryRepository flightPlannerInMemoryRepository;
 
     @InjectMocks
-    FlightPlannerService flightPlannerService;
+    FlightPlannerInMemoryService flightPlannerInMemoryService;
 
     private final String from = "LL54";
     private final String to = "AK99";
@@ -36,10 +36,10 @@ class FlightPlannerServiceTest {
     @DisplayName("Should find flight")
     void searchFlight() {
         List<Flight> mockList = createMockFlightsList();
-        Mockito.when(flightPlannerRepository.getFlights()).thenReturn(mockList);
+        Mockito.when(flightPlannerInMemoryRepository.getFlights()).thenReturn(mockList);
 
-        PageResult<Flight> result = flightPlannerService.searchFlight(request);
-        Mockito.verify(flightPlannerRepository).getFlights();
+        PageResult<Flight> result = flightPlannerInMemoryService.searchFlight(request);
+        Mockito.verify(flightPlannerInMemoryRepository).getFlights();
 
         assertEquals(result.getTotalItems(), 1);
     }

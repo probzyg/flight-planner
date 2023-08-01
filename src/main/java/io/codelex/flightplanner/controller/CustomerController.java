@@ -4,11 +4,10 @@ import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.request.SearchFlightRequest;
 import io.codelex.flightplanner.response.PageResult;
-import io.codelex.flightplanner.service.FlightPlannerService;
+import io.codelex.flightplanner.service.FlightPlannerInMemoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -16,26 +15,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
-    private final FlightPlannerService flightPlannerService;
+    private final FlightPlannerInMemoryService flightPlannerInMemoryService;
 
-    public CustomerController(FlightPlannerService flightPlannerService) {
-        this.flightPlannerService = flightPlannerService;
+    public CustomerController(FlightPlannerInMemoryService flightPlannerInMemoryService) {
+        this.flightPlannerInMemoryService = flightPlannerInMemoryService;
     }
 
     @GetMapping("/airports")
     @ResponseStatus(HttpStatus.OK)
     public List<Airport> searchAirports(@RequestParam("search") String phrase) {
-        return this.flightPlannerService.searchAirports(phrase.trim());
+        return this.flightPlannerInMemoryService.searchAirports(phrase.trim());
     }
 
     @PostMapping("/flights/search")
     public PageResult<Flight> searchFlights(@RequestBody @Valid SearchFlightRequest searchFlightRequest) {
-        return flightPlannerService.searchFlight(searchFlightRequest);
+        return flightPlannerInMemoryService.searchFlight(searchFlightRequest);
     }
 
     @GetMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Flight findFlightById(@PathVariable long id) {
-            return flightPlannerService.fetchFlight(id).getFlight();
+            return flightPlannerInMemoryService.fetchFlight(id).getFlight();
     }
 }

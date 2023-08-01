@@ -1,5 +1,10 @@
 package io.codelex.flightplanner.configuration;
 
+import io.codelex.flightplanner.repository.AirportDatabaseRepository;
+import io.codelex.flightplanner.repository.FlightDatabaseRepository;
+import io.codelex.flightplanner.repository.FlightPlannerInMemoryRepository;
+import io.codelex.flightplanner.service.FlightPlannerDatabaseService;
+import io.codelex.flightplanner.service.FlightPlannerInMemoryService;
 import io.codelex.flightplanner.service.FlightPlannerService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

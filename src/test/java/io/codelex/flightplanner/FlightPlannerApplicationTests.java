@@ -3,9 +3,9 @@ package io.codelex.flightplanner;
 import io.codelex.flightplanner.controller.AdminController;
 import io.codelex.flightplanner.controller.TestingController;
 import io.codelex.flightplanner.domain.Airport;
-import io.codelex.flightplanner.repository.FlightPlannerRepository;
+import io.codelex.flightplanner.repository.FlightPlannerInMemoryRepository;
 import io.codelex.flightplanner.request.AddFlightRequest;
-import io.codelex.flightplanner.service.FlightPlannerService;
+import io.codelex.flightplanner.service.FlightPlannerInMemoryService;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class FlightPlannerApplicationTests {
 
     @Autowired
-    FlightPlannerRepository flightPlannerRepository;
+    FlightPlannerInMemoryRepository flightPlannerInMemoryRepository;
     @Autowired
-    FlightPlannerService flightPlannerService;
+    FlightPlannerInMemoryService flightPlannerInMemoryService;
     @Autowired
     AdminController adminController;
     @Autowired
@@ -29,12 +29,12 @@ class FlightPlannerApplicationTests {
     @Test
     @DisplayName("Should be able to add flights")
     void addFlights() {
-        assertEquals(0, flightPlannerRepository.getFlights().size());
+        assertEquals(0, flightPlannerInMemoryRepository.getFlights().size());
 
         AddFlightRequest flightRequest = createFlightRequest();
         adminController.addFlight(flightRequest);
 
-        assertEquals(1, flightPlannerRepository.getFlights().size());
+        assertEquals(1, flightPlannerInMemoryRepository.getFlights().size());
     }
 
     AddFlightRequest createFlightRequest() {
@@ -53,11 +53,11 @@ class FlightPlannerApplicationTests {
         AddFlightRequest flightRequest = createFlightRequest();
         adminController.addFlight(flightRequest);
 
-        assertEquals(1, flightPlannerRepository.getFlights().size());
+        assertEquals(1, flightPlannerInMemoryRepository.getFlights().size());
 
         testingController.clearFlights();
 
-        assertEquals(0, flightPlannerRepository.getFlights().size());
+        assertEquals(0, flightPlannerInMemoryRepository.getFlights().size());
     }
 
 }
