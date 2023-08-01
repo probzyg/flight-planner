@@ -46,35 +46,35 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
         return flight;
     }
     @Override
-    public Flight isValidAddFlightRequest(AddFlightRequest flightRequest) {
-        isValidAirport(flightRequest);
-        isValidTime(flightRequest);
-        isValidFlightRequest(flightRequest);
+    public synchronized Flight isValidAddFlightRequest(AddFlightRequest flightRequest) {
+        if (isValidAirport(flightRequest)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (isValidTime(flightRequest)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (isValidFlightRequest(flightRequest)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
 
         return createFlight(flightRequest);
     }
     @Override
-    public void isValidAirport(AddFlightRequest flightRequest) {
+    public synchronized boolean isValidAirport(AddFlightRequest flightRequest) {
         String fromAirport = flightRequest.getFrom().getAirport().toLowerCase().trim();
         String toAirport = flightRequest.getTo().getAirport().toLowerCase().trim();
 
-        if (fromAirport.equals(toAirport)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        return fromAirport.equals(toAirport);
     }
     @Override
-    public void isValidTime(AddFlightRequest flightRequest) {
+    public synchronized boolean isValidTime(AddFlightRequest flightRequest) {
         TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
-        if (!flightTimeDTO.isBefore()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        return !flightTimeDTO.isBefore();
     }
     @Override
-    public void isValidFlightRequest(AddFlightRequest flightRequest) {
+    public synchronized boolean isValidFlightRequest(AddFlightRequest flightRequest) {
         Flight flight = createFlight(flightRequest);
-        if (flightPlannerInMemoryRepository.getFlights().contains(flight)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
-        }
+        return flightPlannerInMemoryRepository.getFlights().contains(flight);
     }
     @Override
     public synchronized void deleteFlight(long id) {
