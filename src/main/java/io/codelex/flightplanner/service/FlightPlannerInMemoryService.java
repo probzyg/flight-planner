@@ -116,21 +116,6 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
     }
     @Override
     public PageResult<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
-        if (searchFlightRequest.getFrom().equals(searchFlightRequest.getTo())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-
-        List<Flight> flights = flightPlannerInMemoryRepository.getFlights();
-
-        String from = searchFlightRequest.getFrom().trim().toUpperCase();
-        String to = searchFlightRequest.getTo().trim().toUpperCase();
-
-        List<Flight> foundFlights = flights.stream()
-                    .filter(a -> a.getFrom().getAirport().equals(from) &&
-                            a.getTo().getAirport().equals(to) &&
-                            a.getDepartureDate()
-                                    .equals(searchFlightRequest.getDepartureDate()))
-                    .toList();
-        return new PageResult<>(0, foundFlights.size(), foundFlights);
+        return searchFlightRequest.searchFlight(flightPlannerInMemoryRepository.getFlights(), searchFlightRequest);
     }
 }
