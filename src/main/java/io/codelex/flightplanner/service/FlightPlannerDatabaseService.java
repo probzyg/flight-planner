@@ -77,7 +77,7 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
     public boolean isValidFlightRequest(AddFlightRequest flightRequest) {
         Flight flight = createFlight(flightRequest);
         return flightDatabaseRepository.findAll().contains(flight);
-    } 
+    }
 
     @Override
     public void deleteFlight(long id) {
@@ -120,6 +120,21 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
 
     @Override
     public PageResult<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
-        return null;
+        String from = searchFlightRequest.getFrom();
+        String to = searchFlightRequest.getTo();
+
+        if (from.equals(to)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Flight> flights = flightDatabaseRepository.findAll();
+        List<Flight> foundFlights = flights.stream()
+                .filter(a -> a.getFrom().getAirport().equals(from.trim().toUpperCase()) &&
+                        a.getTo().getAirport().equals(to.trim().toUpperCase()) &&
+                        a.getDepartureDate().equals(searchFlightRequest.getDepartureDate()))
+                .toList();
+
+
+        return new PageResult<>(0, foundFlights.size(), foundFlights);
     }
 }
