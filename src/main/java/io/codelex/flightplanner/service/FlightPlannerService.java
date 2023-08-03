@@ -20,6 +20,5 @@ public interface FlightPlannerService {
     void deleteFlight(long id);
     Flight createFlight(AddFlightRequest addFlightRequest);
     List<Airport> searchAirports(String phrase);
-    List<Airport> createAirportList(List<Flight> flights);
     PageResult<Flight> searchFlight(SearchFlightRequest searchFlightRequest);
 }
