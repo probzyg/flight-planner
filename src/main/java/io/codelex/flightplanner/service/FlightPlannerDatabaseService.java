@@ -98,7 +98,7 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
 
     @Override
     public List<Airport> searchAirports(String phrase) {
-        return null;
+        return airportDatabaseRepository.searchAirportsByPhrase(phrase.trim().toLowerCase());
     }
 
     public void addAirports(AddFlightRequest addFlightRequest) {
