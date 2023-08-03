@@ -120,6 +120,16 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
 
     @Override
     public PageResult<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
-        return searchFlightRequest.searchFlight(flightDatabaseRepository.findAll(), searchFlightRequest);
+        String from = searchFlightRequest.getFrom().trim().toUpperCase();
+        String to = searchFlightRequest.getTo().trim().toUpperCase();
+        String departureDate = searchFlightRequest.getDepartureDate();
+
+        if (from.equals(to)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Flight> foundFlights = flightDatabaseRepository.searchFlightsByFromToAndDepartureDate(from, to, departureDate);
+
+        return new PageResult<>(0, foundFlights.size(), foundFlights);
     }
 }
