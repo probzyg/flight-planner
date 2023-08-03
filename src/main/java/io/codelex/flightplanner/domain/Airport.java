@@ -5,9 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
 
 import java.util.Objects;
+@Getter
+@Setter
 @Entity
 @Table(name = "airport")
 public class Airport {
@@ -26,30 +30,6 @@ public class Airport {
     }
 
     public Airport() {
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAirport() {
-        return airport;
-    }
-
-    public void setAirport(String airport) {
-        this.airport = airport;
     }
 
     @Override

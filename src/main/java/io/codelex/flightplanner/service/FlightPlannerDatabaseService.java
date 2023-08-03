@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class FlightPlannerDatabaseService implements FlightPlannerService{
-    private FlightDatabaseRepository flightDatabaseRepository;
-    private AirportDatabaseRepository airportDatabaseRepository;
-    private Airport from = new Airport();
-    private Airport to = new Airport();
+    private final FlightDatabaseRepository flightDatabaseRepository;
+    private final AirportDatabaseRepository airportDatabaseRepository;
+    private final Airport from = new Airport();
+    private final Airport to = new Airport();
 
     public FlightPlannerDatabaseService(FlightDatabaseRepository flightDatabaseRepository, AirportDatabaseRepository airportDatabaseRepository) {
         this.flightDatabaseRepository = flightDatabaseRepository;
@@ -107,7 +107,6 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
         this.from.setCountry(fromRequest.getCountry());
         this.from.setCity(fromRequest.getCity());
         this.from.setAirport(fromRequest.getAirport());
-
 
         Airport toRequest = addFlightRequest.getTo();
         this.to.setCountry(toRequest.getCountry());
