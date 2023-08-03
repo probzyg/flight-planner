@@ -13,10 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 public class FlightPlannerDatabaseService implements FlightPlannerService{
     private FlightDatabaseRepository flightDatabaseRepository;
     private AirportDatabaseRepository airportDatabaseRepository;
+    private Airport from = new Airport();
+    private Airport to = new Airport();
 
     public FlightPlannerDatabaseService(FlightDatabaseRepository flightDatabaseRepository, AirportDatabaseRepository airportDatabaseRepository) {
         this.flightDatabaseRepository = flightDatabaseRepository;
@@ -25,7 +28,8 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
 
     @Override
     public FlightResponse fetchFlight(long id) {
-        return new FlightResponse(flightDatabaseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        Optional<Flight> flight = flightDatabaseRepository.findById(id);
+        return new FlightResponse(flight.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     @Override
@@ -37,7 +41,8 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
     @Override
     public Flight addFlight(AddFlightRequest flightRequest) {
         Flight flight = isValidAddFlightRequest(flightRequest);
-        return flightDatabaseRepository.save(flight);
+        this.flightDatabaseRepository.save(flight);
+        return flight;
     }
 
     @Override
@@ -45,15 +50,12 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
         if (isValidAirport(flightRequest)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        if (isValidTime(flightRequest)) {
+        if (!isValidTime(flightRequest)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         if (isValidFlightRequest(flightRequest)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-
-        airportDatabaseRepository.save(flightRequest.getFrom());
-        airportDatabaseRepository.save(flightRequest.getTo());
         return createFlight(flightRequest);
     }
 
@@ -75,17 +77,19 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
     public boolean isValidFlightRequest(AddFlightRequest flightRequest) {
         Flight flight = createFlight(flightRequest);
         return flightDatabaseRepository.findAll().contains(flight);
-    }
+    } 
 
     @Override
     public void deleteFlight(long id) {
         flightDatabaseRepository.deleteById(id);
     }
 
-    public synchronized Flight createFlight(AddFlightRequest addFlightRequest) {
+    public Flight createFlight(AddFlightRequest addFlightRequest) {
+        addAirports(addFlightRequest);
+
         Flight flight = new Flight();
-        flight.setFrom(addFlightRequest.getFrom());
-        flight.setTo(addFlightRequest.getTo());
+        flight.setFrom(this.from);
+        flight.setTo(this.to);
         flight.setCarrier(addFlightRequest.getCarrier());
         flight.setDepartureTime(addFlightRequest.getDepartureTime());
         flight.setArrivalTime(addFlightRequest.getArrivalTime());
@@ -97,8 +101,21 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
         return null;
     }
 
-    public List<Airport> createAirportList(List<Flight> flights) {
-        return null;
+    public void addAirports(AddFlightRequest addFlightRequest) {
+
+        Airport fromRequest = addFlightRequest.getFrom();
+        this.from.setCountry(fromRequest.getCountry());
+        this.from.setCity(fromRequest.getCity());
+        this.from.setAirport(fromRequest.getAirport());
+
+
+        Airport toRequest = addFlightRequest.getTo();
+        this.to.setCountry(toRequest.getCountry());
+        this.to.setCity(toRequest.getCity());
+        this.to.setAirport(toRequest.getAirport());
+
+        airportDatabaseRepository.save(this.from);
+        airportDatabaseRepository.save(this.to);
     }
 
     @Override
