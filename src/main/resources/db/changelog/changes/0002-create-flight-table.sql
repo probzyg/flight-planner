@@ -4,8 +4,8 @@
 
 create table flight(
                        id serial PRIMARY KEY,
-                       from_airport VARCHAR(255) references airport(airport) NOT NULL,
-                       to_airport VARCHAR(255) references airport(airport) NOT NULL,
+                       from_airport VARCHAR(255) references airport(airport),
+                       to_airport VARCHAR(255) references airport(airport),
                        carrier VARCHAR(255) NOT NULL,
                        departure_time VARCHAR(255) NOT NULL,
                        arrival_time VARCHAR(255) NOT NULL

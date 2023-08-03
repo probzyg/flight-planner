@@ -3,7 +3,7 @@
 --changeset probzyg:1
 
 create table airport(
-                        country varchar(255) NOT NULL ,
-                        city varchar(255) NOT NULL ,
-                        airport varchar(255) NOT NULL PRIMARY KEY
+                        country varchar(255),
+                        city varchar(255),
+                        airport varchar(255) PRIMARY KEY
 )
