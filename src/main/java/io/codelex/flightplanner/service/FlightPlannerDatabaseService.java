@@ -39,7 +39,7 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
     }
 
     @Override
-    public Flight addFlight(AddFlightRequest flightRequest) {
+    public synchronized Flight addFlight(AddFlightRequest flightRequest) {
         Flight flight = isValidAddFlightRequest(flightRequest);
         this.flightDatabaseRepository.save(flight);
         return flight;
