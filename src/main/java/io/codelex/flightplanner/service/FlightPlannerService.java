@@ -13,12 +13,7 @@ public interface FlightPlannerService {
     FlightResponse fetchFlight(long id);
     void clear();
     Flight addFlight(AddFlightRequest flightRequest);
-    Flight isValidAddFlightRequest(AddFlightRequest flightRequest);
-    boolean isValidAirport(AddFlightRequest flightRequest);
-    boolean isValidTime(AddFlightRequest flightRequest);
-    boolean isValidFlightRequest(AddFlightRequest flightRequest);
     void deleteFlight(long id);
-    Flight createFlight(AddFlightRequest addFlightRequest);
     List<Airport> searchAirports(String phrase);
     PageResult<Flight> searchFlight(SearchFlightRequest searchFlightRequest);
 }
