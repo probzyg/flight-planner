@@ -18,8 +18,6 @@ import java.util.Optional;
 public class FlightPlannerDatabaseService implements FlightPlannerService{
     private final FlightDatabaseRepository flightDatabaseRepository;
     private final AirportDatabaseRepository airportDatabaseRepository;
-    private final Airport from = new Airport();
-    private final Airport to = new Airport();
 
     public FlightPlannerDatabaseService(FlightDatabaseRepository flightDatabaseRepository, AirportDatabaseRepository airportDatabaseRepository) {
         this.flightDatabaseRepository = flightDatabaseRepository;
@@ -87,8 +85,8 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
         addAirports(addFlightRequest);
 
         Flight flight = new Flight();
-        flight.setFrom(this.from);
-        flight.setTo(this.to);
+        flight.setFrom(addFlightRequest.getFrom());
+        flight.setTo(addFlightRequest.getTo());
         flight.setCarrier(addFlightRequest.getCarrier());
         flight.setDepartureTime(addFlightRequest.getDepartureTime());
         flight.setArrivalTime(addFlightRequest.getArrivalTime());
@@ -101,19 +99,8 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
     }
 
     public void addAirports(AddFlightRequest addFlightRequest) {
-
-        Airport fromRequest = addFlightRequest.getFrom();
-        this.from.setCountry(fromRequest.getCountry());
-        this.from.setCity(fromRequest.getCity());
-        this.from.setAirport(fromRequest.getAirport());
-
-        Airport toRequest = addFlightRequest.getTo();
-        this.to.setCountry(toRequest.getCountry());
-        this.to.setCity(toRequest.getCity());
-        this.to.setAirport(toRequest.getAirport());
-
-        airportDatabaseRepository.save(this.from);
-        airportDatabaseRepository.save(this.to);
+        airportDatabaseRepository.save(addFlightRequest.getFrom());
+        airportDatabaseRepository.save(addFlightRequest.getTo());
     }
 
     @Override
