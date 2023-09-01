@@ -16,12 +16,12 @@ import java.util.Objects;
 @Table(name = "airport")
 public class Airport {
     @NotBlank
-    private String country = "";
+    private String country;
     @NotBlank
-    private String city = "";
+    private String city;
     @NotBlank
     @Id
-    private String airport = "";
+    private String airport;
 
     public Airport(String country, String city, String airport) {
         this.country = country;
