@@ -7,6 +7,6 @@ create table flight(
                        from_airport VARCHAR(255) references airport(airport),
                        to_airport VARCHAR(255) references airport(airport),
                        carrier VARCHAR(255) NOT NULL,
-                       departure_time VARCHAR(255) NOT NULL,
-                       arrival_time VARCHAR(255) NOT NULL
+                       departure_time TIMESTAMP NOT NULL,
+                       arrival_time TIMESTAMP NOT NULL
 )

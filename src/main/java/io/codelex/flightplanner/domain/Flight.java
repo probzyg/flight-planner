@@ -1,10 +1,14 @@
 package io.codelex.flightplanner.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.codelex.flightplanner.IdGen;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 @Getter
 @Setter
@@ -23,11 +27,15 @@ public class Flight {
     @Column(name = "carrier")
     private String carrier;
     @Column(name = "departure_time")
-    private String departureTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull
+    private LocalDateTime departureTime;
     @Column(name = "arrival_time")
-    private String arrivalTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull
+    private LocalDateTime arrivalTime;
 
-    public Flight(Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
+    public Flight(Airport from, Airport to, String carrier, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         this.id = IdGen.getNextId();
         this.from = from;
         this.to = to;
@@ -38,8 +46,8 @@ public class Flight {
 
     public Flight() {
     }
-    public String getDepartureDate() {
-        return getDepartureTime().split(" ")[0];
+    public LocalDate getDepartureDate() {
+        return getDepartureTime().toLocalDate();
     }
 
     @Override

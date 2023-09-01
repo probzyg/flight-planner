@@ -3,7 +3,6 @@ package io.codelex.flightplanner.service;
 import io.codelex.flightplanner.IdGen;
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.dto.TimeDTO;
 import io.codelex.flightplanner.repository.FlightPlannerInMemoryRepository;
 import io.codelex.flightplanner.request.AddFlightRequest;
 import io.codelex.flightplanner.request.SearchFlightRequest;
@@ -13,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -50,7 +50,7 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
         if (isValidAirport(flightRequest)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        if (isValidTime(flightRequest)) {
+        if (!isValidTime(flightRequest)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         if (isValidFlightRequest(flightRequest)) {
@@ -68,8 +68,7 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
     }
 
     public synchronized boolean isValidTime(AddFlightRequest flightRequest) {
-        TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
-        return !flightTimeDTO.isBefore();
+        return flightRequest.getDepartureTime().isBefore(flightRequest.getArrivalTime());
     }
 
     public synchronized boolean isValidFlightRequest(AddFlightRequest flightRequest) {
@@ -85,8 +84,8 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
         Airport from = addFlightRequest.getFrom();
         Airport to = addFlightRequest.getTo();
         String carrier = addFlightRequest.getCarrier();
-        String departureTime = addFlightRequest.getDepartureTime();
-        String arrivalTime = addFlightRequest.getArrivalTime();
+        LocalDateTime departureTime = addFlightRequest.getDepartureTime();
+        LocalDateTime arrivalTime = addFlightRequest.getArrivalTime();
 
         return new Flight(from, to, carrier, departureTime, arrivalTime);
     }

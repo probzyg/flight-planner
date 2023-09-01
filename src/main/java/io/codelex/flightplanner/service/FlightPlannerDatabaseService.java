@@ -2,7 +2,6 @@ package io.codelex.flightplanner.service;
 
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.dto.TimeDTO;
 import io.codelex.flightplanner.repository.AirportDatabaseRepository;
 import io.codelex.flightplanner.repository.FlightDatabaseRepository;
 import io.codelex.flightplanner.request.AddFlightRequest;
@@ -12,6 +11,7 @@ import io.codelex.flightplanner.response.PageResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,8 +69,7 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
 
 
     public boolean isValidTime(AddFlightRequest flightRequest) {
-        TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
-        return flightTimeDTO.isBefore();
+        return flightRequest.getDepartureTime().isBefore(flightRequest.getArrivalTime());
     }
 
 
@@ -121,7 +120,7 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
     public PageResult<Flight> searchFlight(SearchFlightRequest searchFlightRequest) {
         String from = searchFlightRequest.getFrom().trim().toUpperCase();
         String to = searchFlightRequest.getTo().trim().toUpperCase();
-        String departureDate = searchFlightRequest.getDepartureDate();
+        LocalDate departureDate = searchFlightRequest.getDepartureDate();
 
         if (from.equals(to)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
