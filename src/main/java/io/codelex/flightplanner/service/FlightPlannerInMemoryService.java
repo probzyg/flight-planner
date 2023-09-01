@@ -45,7 +45,7 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
 
         return flight;
     }
-    @Override
+
     public synchronized Flight isValidAddFlightRequest(AddFlightRequest flightRequest) {
         if (isValidAirport(flightRequest)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -59,19 +59,19 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
 
         return createFlight(flightRequest);
     }
-    @Override
+
     public synchronized boolean isValidAirport(AddFlightRequest flightRequest) {
         String fromAirport = flightRequest.getFrom().getAirport().toLowerCase().trim();
         String toAirport = flightRequest.getTo().getAirport().toLowerCase().trim();
 
         return fromAirport.equals(toAirport);
     }
-    @Override
+
     public synchronized boolean isValidTime(AddFlightRequest flightRequest) {
         TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
         return !flightTimeDTO.isBefore();
     }
-    @Override
+
     public synchronized boolean isValidFlightRequest(AddFlightRequest flightRequest) {
         Flight flight = createFlight(flightRequest);
         return flightPlannerInMemoryRepository.getFlights().contains(flight);
@@ -80,7 +80,7 @@ public class FlightPlannerInMemoryService implements FlightPlannerService {
     public synchronized void deleteFlight(long id) {
         flightPlannerInMemoryRepository.getFlights().removeIf(flight -> flight.getId() == id);
     }
-    @Override
+
     public synchronized Flight createFlight(AddFlightRequest addFlightRequest) {
         Airport from = addFlightRequest.getFrom();
         Airport to = addFlightRequest.getTo();

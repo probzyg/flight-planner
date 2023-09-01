@@ -45,7 +45,7 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
         return flight;
     }
 
-    @Override
+    
     public Flight isValidAddFlightRequest(AddFlightRequest flightRequest) {
         if (isValidAirport(flightRequest)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -59,7 +59,7 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
         return createFlight(flightRequest);
     }
 
-    @Override
+
     public boolean isValidAirport(AddFlightRequest flightRequest) {
         String from = flightRequest.getFrom().getAirport().toLowerCase().trim();
         String to = flightRequest.getTo().getAirport().toLowerCase().trim();
@@ -67,13 +67,13 @@ public class FlightPlannerDatabaseService implements FlightPlannerService{
         return from.equals(to);
     }
 
-    @Override
+
     public boolean isValidTime(AddFlightRequest flightRequest) {
         TimeDTO flightTimeDTO = new TimeDTO(flightRequest.getDepartureTime(), flightRequest.getArrivalTime());
         return flightTimeDTO.isBefore();
     }
 
-    @Override
+
     public boolean isValidFlightRequest(AddFlightRequest flightRequest) {
         Flight flight = createFlight(flightRequest);
         return flightDatabaseRepository.findAll().contains(flight);
