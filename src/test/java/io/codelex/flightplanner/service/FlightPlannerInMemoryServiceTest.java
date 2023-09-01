@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ class FlightPlannerInMemoryServiceTest {
 
     private final String from = "LL54";
     private final String to = "AK99";
-    private final String departureDate = "2023-03-17";
+    private final LocalDate departureDate = "2023-03-17";
     private final SearchFlightRequest request = new SearchFlightRequest(from, to, departureDate);
 
     @Test
